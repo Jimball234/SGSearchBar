@@ -1,0 +1,95 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Weather Terminology Glossary</title>
+        <meta name="description" content="Weather Terminology Glossary">
+        <meta name="author" content="SitePoint">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+            
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    </head>
+
+    <body>
+        <div class="container-out">
+            <div class="container-in">
+            <div class="search-container">
+                <div class="search-engine">
+                <p class="search-title">Weather Glossary</p>
+                <input
+                    type="input"
+                    id="search-input"
+                    autocomplete="off"
+                    placeholder="Hit Enter to Search"
+                />
+                </div>
+                <div id="search-results"></div>
+                <div id="search-data"></div>
+            </div>
+            </div>
+        </div>
+
+        <script>
+
+            var allText;
+            function readTextFile(file)
+            {
+                var rawFile = new XMLHttpRequest();
+                rawFile.open("GET", file, false);
+                rawFile.onreadystatechange = function ()
+                {
+                    if(rawFile.readyState === 4)
+                    {
+                        if(rawFile.status === 200 || rawFile.status == 0)
+                        {
+                            allText = rawFile.responseText;
+                        }
+                    }
+                }
+                rawFile.send(null);
+            }
+
+            readTextFile("/inputfile.txt");
+            console.log(allText);
+            textByLine = allText.split('\n');
+
+            let dict = [];
+            textByLine.forEach(element => {
+                dict.push(element.split('|'));
+            });     // Makes an array of each search term and the corresponding link.
+
+
+
+            search_result = document.getElementById("search-input");
+            search_result.addEventListener('keyup', function search(e) {
+                if (e.key == 'Enter') {
+                    find_closest_result(search_result.value);
+                }
+            });
+
+            function find_closest_result(search_text){
+                search_text = search_text.toLowerCase();
+                dict.forEach(element => {
+                    if(element[0].localeCompare(search_text) == 0){
+                        window.location.href = element[1];
+                    }
+                    if(element[0].localeCompare(search_text) > 0){
+                        return;
+                    }
+                });
+            }
+
+            
+            
+        </script>
+    </body> 
+
+</html>
